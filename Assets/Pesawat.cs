@@ -4,11 +4,19 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class Pesawat : MonoBehaviour
 {
+    [Header("Movement")]
     public float kecepatan = 10f;
     public float rollSpeed = 90f;
     public bool useGravity = false;
     
+    [Header("Shooting")]
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+    public float bulletSpeed = 20f;
+    public float shootCooldown = 0.2f;
+    
     Rigidbody rb;
+    float lastShootTime = 0f;
 
     void Awake()
     {
@@ -25,13 +33,26 @@ public class Pesawat : MonoBehaviour
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.constraints = RigidbodyConstraints.FreezePositionY;
         
-        // Unlock cursor (tidak perlu lock lagi)
         Cursor.lockState = CursorLockMode.None;
+        
+        // Jika bulletSpawnPoint tidak diset, gunakan posisi pesawat
+        if (bulletSpawnPoint == null)
+            bulletSpawnPoint = transform;
     }
 
     void FixedUpdate()
     {
-        // ===== INPUT KEYBOARD (WASD) =====
+        HandleMovement();
+        HandleRoll();
+    }
+    
+    void Update()
+    {
+        HandleShooting();
+    }
+
+    void HandleMovement()
+    {
         Vector3 dir = Vector3.zero;
         
         if (Keyboard.current.wKey.isPressed)
@@ -49,21 +70,48 @@ public class Pesawat : MonoBehaviour
         }
         
         rb.linearVelocity = new Vector3(dir.x, rb.linearVelocity.y, dir.z);
-        
-        // ===== INPUT ROLL (Q/E) - MOUSE DISABLED =====
+    }
+
+    void HandleRoll()
+    {
         float rollInput = 0f;
         if (Keyboard.current.qKey.isPressed)
             rollInput = 1f;
         if (Keyboard.current.eKey.isPressed)
             rollInput = -1f;
         
-        // Hitung rotasi - HANYA ROLL
-        Quaternion deltaRot = Quaternion.Euler(
-            0,  // pitch OFF
-            0,  // yaw OFF
-            rollInput * rollSpeed * Time.fixedDeltaTime
-        );
-        
+        Quaternion deltaRot = Quaternion.Euler(0, 0, rollInput * rollSpeed * Time.fixedDeltaTime);
         rb.MoveRotation(rb.rotation * deltaRot);
+    }
+
+    void HandleShooting()
+    {
+        // Cek jika mouse button kiri ditekan dan cooldown habis
+        if (Mouse.current.leftButton.isPressed && Time.time >= lastShootTime + shootCooldown)
+        {
+            ShootBullet();
+            lastShootTime = Time.time;
+        }
+    }
+
+    void ShootBullet()
+    {
+        if (bulletPrefab == null)
+        {
+            Debug.LogError("Bullet Prefab not assigned!");
+            return;
+        }
+
+        // Instantiate bullet di spawn point
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        
+        if (bulletRb != null)
+        {
+            // Berikan velocity ke arah depan pesawat
+            bulletRb.linearVelocity = transform.forward * bulletSpeed;
+        }
+        
+        Debug.Log("Bullet fired!");
     }
 }
