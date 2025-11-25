@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &116594438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7345224233782293882, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+  m_PrefabInstance: {fileID: 2026748521}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &353637109
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,10 +489,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2953731127672083917, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 019e65cd095dd664899be0fc421c6090, type: 2}
+    - target: {fileID: 4745270247915301693, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 019e65cd095dd664899be0fc421c6090, type: 2}
+    - target: {fileID: 4958281177144653016, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 019e65cd095dd664899be0fc421c6090, type: 2}
     - target: {fileID: 6297171199024291890, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
       propertyPath: m_Name
       value: Pesawat
       objectReference: {fileID: 0}
+    - target: {fileID: 7417359297608448417, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 019e65cd095dd664899be0fc421c6090, type: 2}
     - target: {fileID: 8137819843734955857, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
       propertyPath: m_UseGravity
       value: 0
@@ -550,6 +571,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6297171199024291890, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2026748525}
+    - targetCorrespondingSourceObject: {fileID: 7345224233782293882, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2026748530}
   m_SourcePrefab: {fileID: 100100000, guid: b791ad80278ae9947966a9195cfddc20, type: 3}
 --- !u!1 &2026748522 stripped
 GameObject:
@@ -585,6 +609,27 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 2026748523}
   bulletSpeed: 20
   shootCooldown: 0.2
+--- !u!114 &2026748530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116594438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 590d0a4a23369fe4094bee34430c4b38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.UI.DebugUIHandlerColor
+  colorDefault: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  colorSelected: {r: 0.25, g: 0.65, b: 0.8, a: 1}
+  nameLabel: {fileID: 0}
+  valueToggle: {fileID: 0}
+  colorImage: {fileID: 0}
+  fieldR: {fileID: 0}
+  fieldG: {fileID: 0}
+  fieldB: {fileID: 0}
+  fieldA: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
