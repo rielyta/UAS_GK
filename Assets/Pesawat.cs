@@ -35,7 +35,6 @@ public class Pesawat : MonoBehaviour
         
         Cursor.lockState = CursorLockMode.None;
         
-        // Jika bulletSpawnPoint tidak diset, gunakan posisi pesawat
         if (bulletSpawnPoint == null)
             bulletSpawnPoint = transform;
     }
@@ -80,8 +79,20 @@ public class Pesawat : MonoBehaviour
         if (Keyboard.current.eKey.isPressed)
             rollInput = -1f;
         
-        Quaternion deltaRot = Quaternion.Euler(0, 0, rollInput * rollSpeed * Time.fixedDeltaTime);
-        rb.MoveRotation(rb.rotation * deltaRot);
+      
+        // Hitung rotasi sebagai Euler angles
+        float rollDelta = rollInput * rollSpeed * Time.fixedDeltaTime;
+        
+        // Ambil current rotation sebagai Euler angles
+        Vector3 currentEuler = transform.eulerAngles;
+        
+        // Apply roll (Z-axis rotation)
+        currentEuler.z += rollDelta;
+        
+        // Terapkan kembali ke transform (MANUAL)
+        transform.eulerAngles = currentEuler;
+        
+   
     }
 
     void HandleShooting()
