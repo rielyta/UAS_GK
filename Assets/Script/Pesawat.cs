@@ -15,8 +15,9 @@ public class Pesawat : MonoBehaviour
     public float bulletSpeed = 20f;
     public float shootCooldown = 0.2f;
     
-    Rigidbody rb;
-    float lastShootTime = 0f;
+    private Rigidbody rb;
+    private float lastShootTime = 0f;
+    private PesawatShaderAnimation shaderAnimation;
 
     void Awake()
     {
@@ -37,6 +38,13 @@ public class Pesawat : MonoBehaviour
         
         if (bulletSpawnPoint == null)
             bulletSpawnPoint = transform;
+        
+        // Get shader animation component
+        shaderAnimation = GetComponent<PesawatShaderAnimation>();
+        if (shaderAnimation == null)
+        {
+            Debug.LogWarning("PesawatShaderAnimation component not found! Shader effects will be disabled.");
+        }
     }
 
     void FixedUpdate()
@@ -74,25 +82,27 @@ public class Pesawat : MonoBehaviour
     void HandleRoll()
     {
         float rollInput = 0f;
+        
         if (Keyboard.current.qKey.isPressed)
             rollInput = 1f;
         if (Keyboard.current.eKey.isPressed)
             rollInput = -1f;
         
-      
+        // Update shader animation untuk roll effect
+        if (shaderAnimation != null)
+        {
+            shaderAnimation.UpdateRollEffect(rollInput);
+        }
+        
         // Hitung rotasi sebagai Euler angles
         float rollDelta = rollInput * rollSpeed * Time.fixedDeltaTime;
-        
-        // Ambil current rotation sebagai Euler angles
         Vector3 currentEuler = transform.eulerAngles;
         
         // Apply roll (Z-axis rotation)
         currentEuler.z += rollDelta;
         
-        // Terapkan kembali ke transform (MANUAL)
+        // Apply back to transform
         transform.eulerAngles = currentEuler;
-        
-   
     }
 
     void HandleShooting()
@@ -111,6 +121,12 @@ public class Pesawat : MonoBehaviour
         {
             Debug.LogError("Bullet Prefab not assigned!");
             return;
+        }
+
+        // Trigger shader glow effect
+        if (shaderAnimation != null)
+        {
+            shaderAnimation.TriggerShootGlow();
         }
 
         // Instantiate bullet di spawn point
