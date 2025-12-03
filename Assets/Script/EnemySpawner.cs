@@ -2,32 +2,32 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("Enemy Prefab")]
+    [SerializeField] private GameObject enemyPrefab;
+
     [Header("Spawn Settings")]
-    public GameObject enemyPrefab;
-    public int initialEnemyCount = 5;
-    public float spawnInterval = 3f;
+    [SerializeField] private int initialEnemyCount = 3;
+    [SerializeField] private float spawnInterval = 5f;
 
-    [Header("Spawn Area - Relative to Player")]
-    public float spawnDistanceAhead = 50f; // Jarak di depan player
-    public float spawnDistanceRange = 20f; // Random offset kiri/kanan
-    public float spawnHeight = 2f;
+    [Header("Spawn Area (Di depan pesawat)")]
+    [SerializeField] private float spawnDistanceFromPlayer = 50f; // Jarak spawn dari pesawat
+    [SerializeField] private float spawnWidth = 20f;              // Lebar area spawn (kiri-kanan)
+    [SerializeField] private float spawnHeight = 5f;              // Variasi tinggi spawn
 
-    private float nextSpawnTime;
-    private GameObject player;
+    private Transform playerTransform;
+    private float timeSinceLastSpawn = 0f;
 
     void Start()
     {
-        if (enemyPrefab == null)
+        // Cari pesawat
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            Debug.LogError("Enemy Prefab not assigned to EnemySpawner!");
-            return;
+            playerTransform = player.transform;
         }
-
-        // Cari player
-        player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null)
+        else
         {
-            Debug.LogError("Player not found! Make sure Player has 'Player' tag.");
+            Debug.LogError("Player not found! Make sure Player has tag 'Player'");
             return;
         }
 
@@ -36,58 +36,62 @@ public class EnemySpawner : MonoBehaviour
         {
             SpawnEnemy();
         }
-
-        nextSpawnTime = Time.time + spawnInterval;
     }
 
     void Update()
     {
-        // Spawn musuh baru secara periodik
-        if (Time.time >= nextSpawnTime)
+        if (playerTransform == null) return;
+
+        // Timer untuk spawn musuh baru
+        timeSinceLastSpawn += Time.deltaTime;
+
+        if (timeSinceLastSpawn >= spawnInterval)
         {
             SpawnEnemy();
-            nextSpawnTime = Time.time + spawnInterval;
+            timeSinceLastSpawn = 0f;
         }
     }
 
-void SpawnEnemy()
-{
-    if (player == null) return;
-
-    // Referensi kamera utama
-    Camera cam = Camera.main;
-    if (cam == null)
+    void SpawnEnemy()
     {
-        Debug.LogError("Main Camera not found!");
-        return;
-    }
-
-    // Arah depan kamera
-    Vector3 forward = cam.transform.forward;
-
-    // Posisi dasar tepat di depan kamera
-    Vector3 spawnPos = cam.transform.position + forward * spawnDistanceAhead;
-
-    // Random kiri/kanan berdasarkan kamera orientation
-    spawnPos += cam.transform.right * Random.Range(-spawnDistanceRange, spawnDistanceRange);
-
-    // Tinggi
-    spawnPos.y += Random.Range(-1f, 1f);
-
-    // Spawn enemy
-    Instantiate(enemyPrefab, spawnPos, Quaternion.LookRotation(forward));
-    Debug.Log($"Enemy spawned in front of camera at {spawnPos}");
-}
-
-
-    void OnDrawGizmos()
-    {
-        // Visualisasi spawn area di depan player
-        if (player != null)
+        if (enemyPrefab == null)
         {
-            Vector3 center = player.transform.position + player.transform.forward * spawnDistanceAhead;
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(center, spawnDistanceRange);
+            Debug.LogError("Enemy Prefab not assigned!");
+            return;
         }
+
+        if (playerTransform == null) return;
+
+        // Spawn DI DEPAN pesawat (arah forward pesawat)
+        Vector3 forwardDirection = playerTransform.forward;
+        Vector3 spawnCenter = playerTransform.position + forwardDirection * spawnDistanceFromPlayer;
+
+        // Random offset kiri-kanan
+        Vector3 rightOffset = playerTransform.right * Random.Range(-spawnWidth / 2, spawnWidth / 2);
+
+        // Random offset tinggi
+        Vector3 upOffset = Vector3.up * Random.Range(0, spawnHeight);
+
+        // Posisi spawn final
+        Vector3 spawnPosition = spawnCenter + rightOffset + upOffset;
+
+        // Spawn enemy
+        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+        Debug.Log($"Enemy spawned at {spawnPosition}");
+    }
+
+    // Debug visualization di Scene view
+    private void OnDrawGizmos()
+    {
+        if (playerTransform == null) return;
+
+        // Draw spawn area
+        Gizmos.color = Color.red;
+        Vector3 spawnCenter = playerTransform.position + playerTransform.forward * spawnDistanceFromPlayer;
+
+        // Draw spawn box
+        Gizmos.DrawWireCube(spawnCenter + Vector3.up * spawnHeight / 2,
+                           new Vector3(spawnWidth, spawnHeight, 5));
     }
 }
