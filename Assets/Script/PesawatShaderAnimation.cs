@@ -13,36 +13,37 @@ public class PesawatShaderAnimation : MonoBehaviour
     public float glowFadeDuration = 0.3f;
     
     private Coroutine glowCoroutine;
-    
     void Start()
+{
+    // Try get Renderer in same object
+    Renderer renderer = GetComponent<Renderer>();
+
+    // If not found, search children
+    if (renderer == null)
+        renderer = GetComponentInChildren<Renderer>();
+
+    if (renderer != null)
     {
-        // Dapatkan material instance (bukan shared)
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
+        pesawatMaterial = renderer.material;
+        
+        if (pesawatMaterial == null)
         {
-            pesawatMaterial = renderer.material;
-            
-            if (pesawatMaterial == null)
-            {
-                Debug.LogError("Material not found on renderer!");
-                return;
-            }
-            
-            // Debug: check apakah shader punya property yang kita butuh
-            if (!pesawatMaterial.HasProperty("_RollIntensity"))
-            {
-                Debug.LogWarning("Shader doesn't have _RollIntensity property!");
-            }
-            if (!pesawatMaterial.HasProperty("_ShootGlowIntensity"))
-            {
-                Debug.LogWarning("Shader doesn't have _ShootGlowIntensity property!");
-            }
+            Debug.LogError("Material not found on renderer!");
+            return;
         }
-        else
-        {
-            Debug.LogError("Renderer component not found!");
-        }
+
+        if (!pesawatMaterial.HasProperty("_RollIntensity"))
+            Debug.LogWarning("Shader doesn't have _RollIntensity property!");
+
+        if (!pesawatMaterial.HasProperty("_ShootGlowIntensity"))
+            Debug.LogWarning("Shader doesn't have _ShootGlowIntensity property!");
     }
+    else
+    {
+        Debug.LogError("Renderer component not found in object or children!");
+    }
+}
+
     
     /// <summary>
     /// Update roll effect - mengubah metallic berdasarkan input roll

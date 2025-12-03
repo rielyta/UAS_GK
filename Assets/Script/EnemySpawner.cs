@@ -50,26 +50,35 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    void SpawnEnemy()
+void SpawnEnemy()
+{
+    if (player == null) return;
+
+    // Referensi kamera utama
+    Camera cam = Camera.main;
+    if (cam == null)
     {
-        if (player == null) return;
-
-        // Arah depan player (forward)
-        Vector3 playerForward = player.transform.forward;
-
-        // Posisi dasar: di depan player
-        Vector3 spawnPos = player.transform.position + playerForward * spawnDistanceAhead;
-
-        // Tambah random offset kiri/kanan dan tinggi
-        spawnPos += player.transform.right * Random.Range(-spawnDistanceRange, spawnDistanceRange);
-        // SESUDAH:
-        spawnPos.y = player.transform.position.y + Random.Range(-0.5f, 0.5f);
-
-        // Instantiate enemy
-        GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-
-        Debug.Log($"Enemy spawned at {spawnPos} (ahead of player)");
+        Debug.LogError("Main Camera not found!");
+        return;
     }
+
+    // Arah depan kamera
+    Vector3 forward = cam.transform.forward;
+
+    // Posisi dasar tepat di depan kamera
+    Vector3 spawnPos = cam.transform.position + forward * spawnDistanceAhead;
+
+    // Random kiri/kanan berdasarkan kamera orientation
+    spawnPos += cam.transform.right * Random.Range(-spawnDistanceRange, spawnDistanceRange);
+
+    // Tinggi
+    spawnPos.y += Random.Range(-1f, 1f);
+
+    // Spawn enemy
+    Instantiate(enemyPrefab, spawnPos, Quaternion.LookRotation(forward));
+    Debug.Log($"Enemy spawned in front of camera at {spawnPos}");
+}
+
 
     void OnDrawGizmos()
     {

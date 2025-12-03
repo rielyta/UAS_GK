@@ -107,7 +107,6 @@ public class Pesawat : MonoBehaviour
 
     void HandleShooting()
     {
-        // Cek jika mouse button kiri ditekan dan cooldown habis
         if (Mouse.current.leftButton.isPressed && Time.time >= lastShootTime + shootCooldown)
         {
             ShootBullet();
@@ -123,19 +122,16 @@ public class Pesawat : MonoBehaviour
             return;
         }
 
-        // Trigger shader glow effect
         if (shaderAnimation != null)
         {
             shaderAnimation.TriggerShootGlow();
         }
 
-        // Instantiate bullet di spawn point
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
         Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
         
         if (bulletRb != null)
         {
-            // Berikan velocity ke arah depan pesawat
             bulletRb.linearVelocity = transform.forward * bulletSpeed;
         }
         
