@@ -7,6 +7,8 @@ public class Pesawat : MonoBehaviour
     [Header("Movement")]
     public float kecepatan = 10f;
     public float rollSpeed = 90f;
+    public float pitchSpeed = 90f;
+    public float yawSpeed = 60f;
     public bool useGravity = false;
 
     [Header("Shooting")]
@@ -16,12 +18,27 @@ public class Pesawat : MonoBehaviour
     public float shootCooldown = 0.2f;
 
     [Header("Collision Response")]
-    public float collisionKnockbackForce = 5f; // Force saat nabrak
+    public float collisionKnockbackForce = 5f;
 
     Rigidbody rb;
     float lastShootTime = 0f;
     private bool isBeingKnockedBack = false;
     private float knockbackEndTime = 0f;
+
+    // Manual rotation tracking
+    private float currentPitch = 0f;
+    private float currentRoll = 0f;
+    private float currentYaw = 0f;
+
+    // Manual position tracking
+    private Vector3 currentPosition;
+    private Vector3 currentVelocity;
+
+    // Manual speed control
+    private float currentSpeed = 0f;
+    public float maxSpeed = 20f;
+    public float acceleration = 5f;
+    public float deceleration = 8f;
 
     void Awake()
     {
@@ -32,24 +49,19 @@ public class Pesawat : MonoBehaviour
             return;
         }
 
+        // Setup Rigidbody
         rb.useGravity = useGravity;
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true; // Manual control sepenuhnya
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        // PENTING: Lock rotation untuk mencegah rotasi saat nabrak
-        rb.constraints = RigidbodyConstraints.FreezePositionY |
-                        RigidbodyConstraints.FreezeRotationX |
-                        RigidbodyConstraints.FreezeRotationZ;
+        // Initialize manual tracking
+        currentPosition = transform.position;
+        currentVelocity = Vector3.zero;
+        currentPitch = 0f;
+        currentRoll = 0f;
+        currentYaw = 0f;
 
-        // Tambah mass supaya tidak mudah terlempar
-        rb.mass = 5f;
-
-        // Tambah drag supaya lebih stabil
-        rb.linearDamping = 1f;
-        rb.angularDamping = 5f;
-
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Locked; // Lock cursor ke tengah screen
 
         if (bulletSpawnPoint == null)
             bulletSpawnPoint = transform;
@@ -64,56 +76,143 @@ public class Pesawat : MonoBehaviour
         }
 
         isBeingKnockedBack = false;
+
+        // Update rotasi
+        HandlePitchInput();
+        HandleRollInput();
+        HandleYawInput();
+        ApplyRotation();
+
+        // Update posisi
         HandleMovement();
-        HandleRoll();
+        ApplyPosition();
     }
 
     void Update()
     {
         HandleShooting();
+        HandleCursorToggle();
     }
 
-    void HandleMovement()
+    void HandleCursorToggle()
     {
-        Vector3 dir = Vector3.zero;
-
-        if (Keyboard.current.wKey.isPressed)
-            dir += transform.forward;
-        if (Keyboard.current.sKey.isPressed)
-            dir -= transform.forward;
-        if (Keyboard.current.aKey.isPressed)
-            dir -= transform.right;
-        if (Keyboard.current.dKey.isPressed)
-            dir += transform.right;
-
-        if (dir.magnitude > 0)
+        // Tekan ESC untuk toggle cursor lock
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            dir = dir.normalized * kecepatan;
+            if (Cursor.lockState == CursorLockMode.Locked)
+                Cursor.lockState = CursorLockMode.None;
+            else
+                Cursor.lockState = CursorLockMode.Locked;
         }
-
-        rb.linearVelocity = new Vector3(dir.x, rb.linearVelocity.y, dir.z);
     }
 
-    void HandleRoll()
+
+
+    void HandlePitchInput()
+    {
+        // Pakai mouse Y-axis untuk pitch
+        float mouseY = Mouse.current.delta.y.ReadValue();
+        float pitchInput = -mouseY / 50f; // Negative biar natural (up = pitch up)
+
+        // Hitung perubahan pitch
+        float pitchDelta = pitchInput * pitchSpeed * Time.fixedDeltaTime;
+        currentPitch += pitchDelta;
+
+        // Clamp pitch agar tidak over-rotate
+        currentPitch = ClampAngle(currentPitch, -89f, 89f);
+    }
+
+    void HandleRollInput()
     {
         float rollInput = 0f;
+
+        // Q/E untuk roll
         if (Keyboard.current.qKey.isPressed)
             rollInput = 1f;
         if (Keyboard.current.eKey.isPressed)
             rollInput = -1f;
 
-        // Hitung rotasi sebagai Euler angles
+        // Hitung perubahan roll
         float rollDelta = rollInput * rollSpeed * Time.fixedDeltaTime;
+        currentRoll += rollDelta;
 
-        // Ambil current rotation sebagai Euler angles
-        Vector3 currentEuler = transform.eulerAngles;
-
-        // Apply roll (Y-axis rotation untuk top-down view)
-        currentEuler.y += rollDelta;
-
-        // Terapkan kembali ke transform (MANUAL)
-        transform.eulerAngles = currentEuler;
+        // Normalize roll angle
+        currentRoll = NormalizeAngle(currentRoll);
     }
+
+    void HandleYawInput()
+    {
+        // Pakai mouse X-axis untuk yaw
+        float mouseX = Mouse.current.delta.x.ReadValue();
+        float yawInput = mouseX / 50f;
+
+        // Hitung perubahan yaw
+        float yawDelta = yawInput * yawSpeed * Time.fixedDeltaTime;
+        currentYaw += yawDelta;
+
+        // Normalize yaw angle
+        currentYaw = NormalizeAngle(currentYaw);
+    }
+
+    void ApplyRotation()
+    {
+        // Terapkan rotasi secara manual menggunakan Euler angles
+        // Format: X = Pitch, Y = Yaw, Z = Roll
+        Vector3 eulerAngles = new Vector3(currentPitch, currentYaw, currentRoll);
+        transform.eulerAngles = eulerAngles;
+    }
+
+  
+    void HandleMovement()
+    {
+        // Hitung input maju/mundur
+        float thrustInput = 0f;
+        
+        if (Keyboard.current.wKey.isPressed)
+            thrustInput = 1f;
+        if (Keyboard.current.sKey.isPressed)
+            thrustInput = -1f;
+
+        // Hitung acceleration/deceleration
+        if (Mathf.Abs(thrustInput) > 0.01f)
+        {
+            // Ada input, accelerate
+            currentSpeed = Mathf.Lerp(currentSpeed, thrustInput * maxSpeed, acceleration * Time.fixedDeltaTime);
+        }
+        else
+        {
+            // Tidak ada input, decelerate
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, deceleration * Time.fixedDeltaTime);
+        }
+
+        // Hitung forward direction berdasarkan rotation
+        Vector3 forwardDirection = CalculateForwardDirection();
+
+        // Hitung velocity dengan speed yang sudah di-calculate
+        currentVelocity = forwardDirection * currentSpeed;
+    }
+
+    Vector3 CalculateForwardDirection()
+    {
+        // Konversi Euler angles ke quaternion untuk mendapat forward direction
+        Quaternion rotation = Quaternion.Euler(currentPitch, currentYaw, currentRoll);
+        Vector3 forward = rotation * Vector3.forward;
+
+        return forward.normalized;
+    }
+
+    void ApplyPosition()
+    {
+        // Update posisi secara manual
+        currentPosition += currentVelocity * Time.fixedDeltaTime;
+
+        // Terapkan posisi ke transform
+        transform.position = currentPosition;
+
+        // Update Rigidbody position (karena kinematic)
+        rb.MovePosition(currentPosition);
+    }
+
 
     void HandleShooting()
     {
@@ -133,30 +232,36 @@ public class Pesawat : MonoBehaviour
             return;
         }
 
-        // Instantiate bullet di spawn point
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+        // Hitung posisi spawn bullet
+        Vector3 spawnPosition = bulletSpawnPoint.position;
+
+        // Hitung rotasi bullet (sama dengan pesawat)
+        Quaternion spawnRotation = Quaternion.Euler(currentPitch, currentYaw, currentRoll);
+
+        // Instantiate bullet
+        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, spawnRotation);
         Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
 
         if (bulletRb != null)
         {
-            // Berikan velocity ke arah depan pesawat
-            bulletRb.linearVelocity = transform.forward * bulletSpeed;
+            // Hitung forward direction dan berikan velocity
+            Vector3 bulletForward = CalculateForwardDirection();
+            bulletRb.linearVelocity = bulletForward * bulletSpeed;
         }
 
         Debug.Log("Bullet fired!");
     }
 
-    // Handle collision dengan enemy
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             // Hitung arah knockback (menjauhi enemy)
-            Vector3 knockbackDirection = (transform.position - collision.transform.position).normalized;
-            knockbackDirection.y = 0; // Jaga agar tidak terbang
+            Vector3 knockbackDirection = CalculateKnockbackDirection(collision.transform.position);
 
-            // Terapkan knockback force (hanya bergetar sedikit)
-            rb.AddForce(knockbackDirection * collisionKnockbackForce, ForceMode.Impulse);
+            // Terapkan knockback
+            ApplyKnockback(knockbackDirection);
 
             // Set knockback state (0.2 detik)
             isBeingKnockedBack = true;
@@ -164,5 +269,76 @@ public class Pesawat : MonoBehaviour
 
             Debug.Log("Pesawat hit enemy!");
         }
+    }
+
+    Vector3 CalculateKnockbackDirection(Vector3 enemyPosition)
+    {
+        // Hitung vector dari enemy ke pesawat
+        Vector3 directionFromEnemy = currentPosition - enemyPosition;
+
+        // Normalisasi dan jaga Y agar tidak terbang
+        directionFromEnemy.y = 0;
+        directionFromEnemy = directionFromEnemy.normalized;
+
+        return directionFromEnemy;
+    }
+
+    void ApplyKnockback(Vector3 direction)
+    {
+        // Tambahkan force ke velocity saat ini
+        Vector3 knockbackVelocity = direction * collisionKnockbackForce;
+        currentVelocity += knockbackVelocity;
+    }
+
+    // ===== UTILITY FUNCTIONS (MANUAL) =====
+
+    float ClampAngle(float angle, float min, float max)
+    {
+        if (angle > 180f)
+            angle -= 360f;
+
+        if (angle < -180f)
+            angle += 360f;
+
+        // Clamp antara min dan max
+        if (angle > max)
+            angle = max;
+        if (angle < min)
+            angle = min;
+
+        return angle;
+    }
+
+    float NormalizeAngle(float angle)
+    {
+        // Normalize angle ke range -180 sampai 180
+        while (angle > 180f)
+            angle -= 360f;
+
+        while (angle < -180f)
+            angle += 360f;
+
+        return angle;
+    }
+
+    // Debug function untuk display info
+    void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10, 10, 300, 240));
+        GUILayout.Label("Pesawat Controller (Mouse Control)");
+        GUILayout.Label($"Position: {currentPosition}");
+        GUILayout.Label($"Speed: {currentSpeed:F2} / {maxSpeed}");
+        GUILayout.Label($"Velocity Magnitude: {currentVelocity.magnitude:F2}");
+        GUILayout.Label($"Pitch: {currentPitch:F2}°");
+        GUILayout.Label($"Roll: {currentRoll:F2}°");
+        GUILayout.Label($"Yaw: {currentYaw:F2}°");
+        GUILayout.Label("");
+        GUILayout.Label("Controls:");
+        GUILayout.Label("W/S - Maju/Mundur");
+        GUILayout.Label("Mouse Move - Pitch/Yaw");
+        GUILayout.Label("Q/E - Roll");
+        GUILayout.Label("Mouse Left Click - Shoot");
+        GUILayout.Label("ESC - Unlock Cursor");
+        GUILayout.EndArea();
     }
 }
