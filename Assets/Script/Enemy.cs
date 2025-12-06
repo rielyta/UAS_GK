@@ -103,30 +103,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // ===== FIX: Deteksi bullet dengan OnTriggerEnter =====
     private void OnTriggerEnter(Collider other)
     {
-        // Debug untuk cek collision
-        Debug.Log($"Enemy triggered by: {other.gameObject.name} with tag: {other.tag}");
-
-        if (other.CompareTag("Bullet"))
+        // Deteksi Peluru
+        if (other.CompareTag("Bullet")) // Pastikan Tag Peluru adalah "Bullet"
         {
-            Debug.Log("Bullet hit enemy!");
+            Destroy(other.gameObject); // Hancurkan peluru
+            currentHits++; // Tambah hitungan kena
+            GrowEnemy();   // Musuh membesar
 
-            // Hancurkan bullet
-            Destroy(other.gameObject);
-
-            // Tambah hit counter
-            currentHits++;
-            Debug.Log($"Enemy hit {currentHits}/{hitsToDestroy} times");
-
-            // Membesar
-            GrowEnemy();
-
-            // Cek apakah sudah cukup hit untuk hancur
+            // Jika sudah 3x kena, baru meledak dan tambah skor
             if (currentHits >= hitsToDestroy)
             {
-                Debug.Log("Enemy destroyed by bullets!");
                 Explode();
             }
         }
@@ -163,9 +151,11 @@ public class Enemy : MonoBehaviour
 
     private void Explode()
     {
-        Debug.Log("Enemy exploding!");
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.AddScore(1); 
+        }
 
-        // Tambahkan explosion force ke objek sekitar
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider nearbyObject in colliders)
         {
@@ -175,7 +165,6 @@ public class Enemy : MonoBehaviour
                 rbNearby.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
         }
-
         Destroy(gameObject);
     }
 
