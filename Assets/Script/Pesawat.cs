@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Pesawat : MonoBehaviour
@@ -16,6 +17,9 @@ public class Pesawat : MonoBehaviour
     public Transform bulletSpawnPoint;
     public float bulletSpeed = 20f;
     public float shootCooldown = 0.2f;
+    public AudioClip shootSound; 
+    public int bulletsPerShot = 1; 
+    public float bulletSpread = 10f; 
 
     [Header("Collision Response")]
     public float collisionKnockbackForce = 5f;
@@ -232,26 +236,88 @@ public class Pesawat : MonoBehaviour
             return;
         }
 
-        // Hitung posisi spawn bullet
-        Vector3 spawnPosition = bulletSpawnPoint.position;
-
-        // Hitung rotasi bullet (sama dengan pesawat)
-        Quaternion spawnRotation = Quaternion.Euler(currentPitch, currentYaw, currentRoll);
-
-        // Instantiate bullet
-        GameObject bullet = Instantiate(bulletPrefab, spawnPosition, spawnRotation);
-        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-
-        if (bulletRb != null)
+        if (bulletSpawnPoint == null)
         {
-            // Hitung forward direction dan berikan velocity
-            Vector3 bulletForward = CalculateForwardDirection();
-            bulletRb.linearVelocity = bulletForward * bulletSpeed;
+            Debug.LogError("Bullet Spawn Point not assigned!");
+            return;
         }
 
-        Debug.Log("Bullet fired!");
+        for (int i = 0; i < bulletsPerShot; i++)
+        {
+            // Hitung spread angle untuk multiple bullets
+            float angle = 0f;
+            if (bulletsPerShot > 1)
+            {
+                angle = bulletSpread * (i - (bulletsPerShot - 1) / 2f);
+            }
+
+            // Hitung rotasi dengan spread
+            Quaternion spreadRotation = Quaternion.Euler(0, angle, 0);
+            Quaternion finalRotation = bulletSpawnPoint.rotation * spreadRotation;
+
+            // Instantiate bullet
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, finalRotation);
+            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+
+            if (bulletRb != null)
+            {
+                // Beri velocity sesuai arah bullet
+                Vector3 bulletForward = finalRotation * Vector3.forward;
+                bulletRb.linearVelocity = bulletForward * bulletSpeed;
+            }
+        }
+
+        ParticleSystem muzzleFlash = bulletSpawnPoint.GetComponentInChildren<ParticleSystem>();
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.Play();
+        }
+
+        if (shootSound != null)
+        {
+            AudioSource.PlayClipAtPoint(shootSound, bulletSpawnPoint.position, 0.5f);
+        }
+
+        PesawatShaderAnimation shaderAnim = GetComponent<PesawatShaderAnimation>();
+        if (shaderAnim != null)
+        {
+            shaderAnim.TriggerShootGlow();
+        }
+
+        StartCoroutine(CameraShake(0.1f, 0.15f));
+
+        if (bulletsPerShot > 1)
+        {
+            Debug.Log($"Fired {bulletsPerShot} bullets with {bulletSpread}° spread!");
+        }
+        else
+        {
+            Debug.Log("Bullet fired!");
+        }
     }
 
+    // Coroutine untuk camera shake effect
+    IEnumerator CameraShake(float duration, float magnitude)
+    {
+        Camera cam = Camera.main;
+        if (cam == null) yield break;
+
+        Vector3 originalPos = cam.transform.localPosition;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float x = Random.Range(-1f, 1f) * magnitude;
+            float y = Random.Range(-1f, 1f) * magnitude;
+
+            cam.transform.localPosition = originalPos + new Vector3(x, y, 0);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        cam.transform.localPosition = originalPos;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
