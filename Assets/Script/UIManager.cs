@@ -1,33 +1,54 @@
 using UnityEngine;
-using TMPro; // Wajib ada untuk mengakses TextMeshPro
+using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI; // WAJIB ADA: Untuk mengakses komponen Image
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance; 
+    public static UIManager instance;
 
-    [Header("UI Settings")]
-    public TextMeshProUGUI scoreText; 
+    [Header("UI References")]
+    public TextMeshProUGUI scoreText;
+    public GameObject gameOverPanel;
 
-    private int score = 0; // Skor awal
+    [Header("Heart System")]
+    public Image[] heartIcons;   // Ubah dari GameObject[] ke Image[]
+    public Sprite fullHeart;     // Tempat menaruh gambar Hati Penuh
+    public Sprite brokenHeart;   // Tempat menaruh gambar Hati Rusak
+
+    private int score = 0;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (instance == null) instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
     {
-        UpdateScoreUI(); // skor 0 saat mulai
+        UpdateScoreUI();
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        Time.timeScale = 1f;
     }
 
-    // fungsi yang akan dipanggil saat musuh mati
+    // === FUNGSI UPDATE NYAWA (VERSI TUKAR GAMBAR) ===
+    public void UpdateLives(int currentHealth)
+    {
+        for (int i = 0; i < heartIcons.Length; i++)
+        {
+            // Jika index hati masih dalam batas nyawa, pakai Hati Penuh
+            if (i < currentHealth)
+            {
+                heartIcons[i].sprite = fullHeart;
+            }
+            // Jika tidak, ganti jadi Hati Rusak
+            else
+            {
+                heartIcons[i].sprite = brokenHeart;
+            }
+        }
+    }
+
     public void AddScore(int amount)
     {
         score += amount;
@@ -36,10 +57,21 @@ public class UIManager : MonoBehaviour
 
     void UpdateScoreUI()
     {
-        // Mengubah tulisan di layar
-        if (scoreText != null)
+        if (scoreText != null) scoreText.text = "Score: " + score;
+    }
+
+    public void TriggerGameOver()
+    {
+        if (gameOverPanel != null)
         {
-            scoreText.text = "Score: " + score;
+            gameOverPanel.SetActive(true);
+            Time.timeScale = 0f;
         }
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
