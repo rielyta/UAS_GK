@@ -4,7 +4,7 @@ public class Bullet : MonoBehaviour
 {
     [Header("Rotation")]
     public float rotationSpeed = 360f; // derajat per detik
-    public Vector3 rotationAxis = Vector3.up;
+    public Vector3 rotationAxis = Vector3.forward; // Ubah ke forward agar muter di tempat
 
     [Header("Lifetime")]
     public float lifetime = 10f; // bullet hilang setelah 10 detik
@@ -27,23 +27,19 @@ public class Bullet : MonoBehaviour
         // Bullet tidak terpengaruh gravity
         rb.useGravity = false;
 
-        // ===== PENTING: Tidak gunakan rb.constraints =====
-        // Gunakan manual rotation instead
+        // PENTING: Constraint rotasi agar tidak muter ke mana-mana
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+
         rb.angularVelocity = Vector3.zero;
     }
 
     void FixedUpdate()
     {
-        // Hanya logika putaran peluru
-        float rotationDelta = rotationSpeed * Time.fixedDeltaTime;
-        Vector3 currentEuler = transform.eulerAngles;
+        // Rotasi HANYA di axis Z (muter di tempat)
+        // Menggunakan Rotate() lebih stable daripada manual euler
+        transform.Rotate(rotationAxis, rotationSpeed * Time.fixedDeltaTime, Space.Self);
 
-        if (rotationAxis.x != 0) currentEuler.x += rotationDelta * rotationAxis.x;
-        if (rotationAxis.y != 0) currentEuler.y += rotationDelta * rotationAxis.y;
-        if (rotationAxis.z != 0) currentEuler.z += rotationDelta * rotationAxis.z;
-
-        transform.eulerAngles = currentEuler;
-
+        // Check lifetime
         if (Time.time - spawnTime >= lifetime)
         {
             Destroy(gameObject);

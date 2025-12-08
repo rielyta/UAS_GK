@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6747095980198376949}
   - component: {fileID: 4317526737408815673}
   - component: {fileID: 786863962345706287}
+  - component: {fileID: 3914379198397537572}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -161,3 +162,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3914379198397537572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097741704937675371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8881bc757080b70429f25e1ae4c60a59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  moveSpeed: 8
+  zigzagSpeed: 3
+  zigzagAmount: 5
+  changeDirectionInterval: 2
+  growthAmount: 0.15
+  maxSize: 3
+  hitsToDestroy: 3
+  explosionForce: 25
+  explosionRadius: 12

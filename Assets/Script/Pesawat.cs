@@ -267,17 +267,6 @@ public class Pesawat : MonoBehaviour
             }
         }
 
-        ParticleSystem muzzleFlash = bulletSpawnPoint.GetComponentInChildren<ParticleSystem>();
-        if (muzzleFlash != null)
-        {
-            muzzleFlash.Play();
-        }
-
-        if (shootSound != null)
-        {
-            AudioSource.PlayClipAtPoint(shootSound, bulletSpawnPoint.position, 0.5f);
-        }
-
         PesawatShaderAnimation shaderAnim = GetComponent<PesawatShaderAnimation>();
         if (shaderAnim != null)
         {

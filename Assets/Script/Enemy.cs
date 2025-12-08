@@ -1,8 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     [Header("Movement Settings")]
+    [SerializeField] private bool canMove = false; // SET INI FALSE UNTUK DIEM!
     [SerializeField] private float moveSpeed = 8f;
     [SerializeField] private float zigzagSpeed = 3f;
     [SerializeField] private float zigzagAmount = 5f;
@@ -11,9 +12,13 @@ public class Enemy : MonoBehaviour
     [Header("Growth Settings")]
     [SerializeField] private float growthAmount = 0.15f;
     [SerializeField] private float maxSize = 3f;
-    [SerializeField] private int hitsToDestroy = 3; // Jumlah hit untuk hancur
+    [SerializeField] private int hitsToDestroy = 3;
+
+    [Header("Score Settings")]
+    [SerializeField] private int scoreValue = 10;
 
     [Header("Explosion Settings")]
+    [SerializeField] private GameObject explosionEffect;
     [SerializeField] private float explosionForce = 25f;
     [SerializeField] private float explosionRadius = 12f;
 
@@ -33,9 +38,14 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        // PENTING: Setup rigidbody agar BENAR-BENAR diem
+        rb.isKinematic = true; // Kinematic = tidak terpengaruh physics
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll; // Freeze semua movement dan rotation
+
         startPosition = transform.position;
 
-        // Cari pesawat
+        // Cari pesawat (untuk rotasi menghadap player)
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -49,12 +59,13 @@ public class Enemy : MonoBehaviour
         // Random arah zigzag awal
         zigzagDirection = Random.Range(0, 2) == 0 ? -1f : 1f;
 
-        Debug.Log($"Enemy spawned. Needs {hitsToDestroy} hits to destroy.");
+        Debug.Log($"Enemy spawned (Stationary Mode). Needs {hitsToDestroy} hits to destroy.");
     }
 
     void FixedUpdate()
     {
-        if (playerTransform == null) return;
+        // SKIP SEMUA MOVEMENT JIKA canMove = false
+        if (!canMove || playerTransform == null) return;
 
         // ===== TRANSFORMASI 1: TRANSLASI MAJU (menuju pesawat) =====
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
@@ -106,11 +117,15 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Deteksi Peluru
-        if (other.CompareTag("Bullet")) // Pastikan Tag Peluru adalah "Bullet"
+        if (other.CompareTag("Bullet"))
         {
-            Destroy(other.gameObject); // Hancurkan peluru
-            currentHits++; // Tambah hitungan kena
-            GrowEnemy();   // Musuh membesar
+            Debug.Log($"🎯 BULLET HIT ENEMY!");
+
+            Destroy(other.gameObject);
+            currentHits++;
+            GrowEnemy();
+
+            Debug.Log($"Enemy hit! {currentHits}/{hitsToDestroy}");
 
             // Jika sudah 3x kena, baru meledak dan tambah skor
             if (currentHits >= hitsToDestroy)
@@ -120,7 +135,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // ===== FIX: Deteksi nabrak pesawat =====
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log($"Enemy collided with: {collision.gameObject.name} with tag: {collision.gameObject.tag}");
@@ -151,11 +165,26 @@ public class Enemy : MonoBehaviour
 
     private void Explode()
     {
+        Debug.Log($"💥 Enemy exploding! Adding {scoreValue} score.");
+
+        // ===== TAMBAH SKOR (PAKAI VARIABLE) =====
         if (UIManager.instance != null)
         {
-            UIManager.instance.AddScore(1); 
+            Debug.Log($"✅ UIManager found! Adding score: {scoreValue}");
+            UIManager.instance.AddScore(scoreValue);
+        }
+        else
+        {
+            Debug.LogError("❌ UIManager.instance is NULL! Score not added.");
         }
 
+        // ===== SPAWN EXPLOSION EFFECT =====
+        if (explosionEffect != null)
+        {
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        }
+
+        // ===== EXPLOSION FORCE KE OBJEK SEKITAR =====
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider nearbyObject in colliders)
         {
@@ -165,6 +194,8 @@ public class Enemy : MonoBehaviour
                 rbNearby.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
         }
+
+        // ===== HANCURKAN ENEMY =====
         Destroy(gameObject);
     }
 
