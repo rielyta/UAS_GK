@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // WAJIB ADA: Untuk mengakses komponen Image
+using UnityEngine.UI; 
 
 public class UIManager : MonoBehaviour
 {
@@ -12,9 +12,9 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
 
     [Header("Heart System")]
-    public Image[] heartIcons;   // Ubah dari GameObject[] ke Image[]
-    public Sprite fullHeart;     // Tempat menaruh gambar Hati Penuh
-    public Sprite brokenHeart;   // Tempat menaruh gambar Hati Rusak
+    public Image[] heartIcons;   
+    public Sprite fullHeart;     
+    public Sprite brokenHeart;  
 
     private int score = 0;
 
@@ -31,17 +31,15 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    // === FUNGSI UPDATE NYAWA (VERSI TUKAR GAMBAR) ===
+    // === UPDATE NYAWA ===
     public void UpdateLives(int currentHealth)
     {
         for (int i = 0; i < heartIcons.Length; i++)
         {
-            // Jika index hati masih dalam batas nyawa, pakai Hati Penuh
             if (i < currentHealth)
             {
                 heartIcons[i].sprite = fullHeart;
             }
-            // Jika tidak, ganti jadi Hati Rusak
             else
             {
                 heartIcons[i].sprite = brokenHeart;
@@ -65,7 +63,22 @@ public class UIManager : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
-            Time.timeScale = 0f;
+            Time.timeScale = 0f; // Pause Game
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                Pesawat scriptPesawat = player.GetComponent<Pesawat>();
+
+                if (scriptPesawat != null)
+                {
+                    scriptPesawat.enabled = false;
+                }
+            }
+            Debug.Log("GAME OVER! Mouse unlocked & Player script disabled.");
         }
     }
 
