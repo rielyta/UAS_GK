@@ -11,11 +11,11 @@ public class Pesawat : MonoBehaviour
 
     [Header("Movement - ULTRA RESPONSIVE")]
     public float kecepatan = 10f;
-    public float rollSpeed = 180f;      // MASSIVELY increased
-    public float pitchSpeed = 180f;     // MASSIVELY increased
-    public float yawSpeed = 150f;       // MASSIVELY increased
-    public float mouseSensitivity = 5.5f; // MUCH HIGHER sensitivity
-    public bool useGravity = false;
+    public float rollSpeed = 180f;      
+    public float pitchSpeed = 180f;     
+    public float yawSpeed = 150f;       
+    public float mouseSensitivity = 5.5f; 
+  public bool useGravity = false;
 
     [Header("Shooting")]
     public GameObject bulletPrefab;
@@ -27,9 +27,9 @@ public class Pesawat : MonoBehaviour
     public float bulletSpread = 10f;
 
     [Header("Collision Response")]
-    public float collisionKnockbackForce = 10f;  // Increased dari 5
-    public float invincibilityDuration = 2f;    // NEW: Durasi invincible setelah kena hit
-    public float blinkInterval = 0.1f;          // NEW: Interval kedip saat invincible
+    public float collisionKnockbackForce = 10f;  
+    public float invincibilityDuration = 2f;    
+    public float blinkInterval = 0.1f;          
 
     Rigidbody rb;
     float lastShootTime = 0f;
@@ -49,9 +49,9 @@ public class Pesawat : MonoBehaviour
 
     // Manual speed control
     private float currentSpeed = 0f;
-    public float maxSpeed = 25f;        // Increased untuk speed lebih tinggi
-    public float acceleration = 12f;    // MUCH faster acceleration
-    public float deceleration = 15f;    // MUCH faster deceleration
+    public float maxSpeed = 25f;       
+    public float acceleration = 12f;   
+    public float deceleration = 15f;   
 
     // Visual feedback
     private Renderer[] planeRenderers;
@@ -300,7 +300,6 @@ public class Pesawat : MonoBehaviour
         }
 
         this.enabled = false;
-
     }
 
     void SetPlaneVisibility(bool visible)
