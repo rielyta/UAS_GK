@@ -4,31 +4,36 @@ public class Enemy : MonoBehaviour
 {
     [Header("Movement Stats")]
     public float moveSpeed = 15f;
-    public float turnSpeed = 2f;      // Kecepatan belok
-    public float hoverFrequency = 2f; // Kecepatan naik turun
-    public float hoverAmplitude = 0.5f; // Jarak naik turun
+    public float turnSpeed = 2f;
+    public float hoverFrequency = 2f;
+    public float hoverAmplitude = 0.5f;
 
     [Header("Gameplay")]
     public int maxHealth = 3;
     public int scoreValue = 100;
     public GameObject explosionPrefab;
 
+    [Header("Collision Settings")]
+    public float damageToPlayer = 1;
+    public bool destroyOnPlayerHit = true;
+
     private Transform playerTarget;
     private Rigidbody rb;
     private int currentHealth;
-
-    // Variabel untuk efek visual
     private float randomHoverOffset;
+    private bool hasHitPlayer = false; // Prevent multiple hits
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // IMPORTANT: Setup proper collision
         rb.useGravity = false;
-        rb.isKinematic = true; // Kita gerakkan manual via MovePosition
+        rb.isKinematic = false; // CHANGED: Must be false for collision detection
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         currentHealth = maxHealth;
-
-        // Agar gerakan naik turun tiap musuh tidak serentak
         randomHoverOffset = Random.Range(0f, 10f);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -37,55 +42,91 @@ public class Enemy : MonoBehaviour
         // Tambahkan komponen visual builder jika belum ada
         if (GetComponent<EnemyVisualBuilder>() == null)
             gameObject.AddComponent<EnemyVisualBuilder>();
+
+        // CRITICAL: Ensure enemy has proper collider
+        Collider col = GetComponent<Collider>();
+        if (col == null)
+        {
+            // Add sphere collider if missing
+            SphereCollider sphere = gameObject.AddComponent<SphereCollider>();
+            sphere.radius = 1f;
+            sphere.isTrigger = false; // MUST be false for collision
+            Debug.Log("Added SphereCollider to Enemy");
+        }
+        else
+        {
+            col.isTrigger = false; // Make sure it's NOT a trigger
+        }
+
+        // Make sure enemy has the correct tag
+        if (!gameObject.CompareTag("Enemy"))
+        {
+            gameObject.tag = "Enemy";
+            Debug.Log("Set Enemy tag");
+        }
     }
 
     void FixedUpdate()
     {
         if (playerTarget == null) return;
 
-        // 1. ROTASI: Menghadap ke Pemain secara halus
+        // ROTASI: Menghadap ke Pemain
         Vector3 directionToPlayer = (playerTarget.position - transform.position).normalized;
 
         if (directionToPlayer != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-            // Slerp membuat rotasi halus, tidak scapping
             rb.MoveRotation(Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
         }
 
-        // 2. POSISI: Maju ke depan (berdasarkan arah hadap sekarang) + Efek Hover
+        // POSISI: Maju + Hover effect
         Vector3 forwardMovement = transform.forward * moveSpeed * Time.fixedDeltaTime;
-
-        // Hitung efek naik turun (Sinusoidal wave)
         float hoverY = Mathf.Sin((Time.time + randomHoverOffset) * hoverFrequency) * hoverAmplitude * Time.fixedDeltaTime;
         Vector3 hoverMovement = Vector3.up * hoverY;
 
-        // Terapkan gerakan
         rb.MovePosition(transform.position + forwardMovement + hoverMovement);
     }
 
+    // === BULLET COLLISION (Trigger) ===
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Bullet"))
         {
-            Destroy(other.gameObject); // Hancurkan peluru
+            Debug.Log("🎯 Enemy hit by bullet!");
+            Destroy(other.gameObject);
             TakeDamage(1);
         }
     }
 
+    // === PLAYER COLLISION (Non-Trigger) ===
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && !hasHitPlayer)
         {
-            Explode(); // Tabrakan dengan pemain langsung meledak
+            hasHitPlayer = true;
+            Debug.Log("💥 Enemy collided with Player!");
+
+            // Damage player
+            Pesawat playerScript = collision.gameObject.GetComponent<Pesawat>();
+            if (playerScript != null)
+            {
+                playerScript.TakeDamage((int)damageToPlayer, transform.position);
+            }
+
+            // Destroy enemy if set
+            if (destroyOnPlayerHit)
+            {
+                Explode();
+            }
         }
     }
 
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        // Efek visual kena hit (sedikit membesar sebentar lalu kembali)
         StartCoroutine(HitFlash());
+
+        Debug.Log($"Enemy health: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
@@ -95,7 +136,6 @@ public class Enemy : MonoBehaviour
 
     System.Collections.IEnumerator HitFlash()
     {
-        // Simple scale effect
         Vector3 originalScale = transform.localScale;
         transform.localScale = originalScale * 1.2f;
         yield return new WaitForSeconds(0.1f);
@@ -104,6 +144,8 @@ public class Enemy : MonoBehaviour
 
     void Explode()
     {
+        Debug.Log($"💥 Enemy exploded! Score: +{scoreValue}");
+
         if (UIManager.instance != null)
         {
             UIManager.instance.AddScore(scoreValue);

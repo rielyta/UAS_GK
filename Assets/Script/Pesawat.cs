@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
@@ -9,11 +9,12 @@ public class Pesawat : MonoBehaviour
     public int maxHealth = 3;
     private int currentHealth;
 
-    [Header("Movement")]
+    [Header("Movement - ULTRA RESPONSIVE")]
     public float kecepatan = 10f;
-    public float rollSpeed = 90f;
-    public float pitchSpeed = 90f;
-    public float yawSpeed = 60f;
+    public float rollSpeed = 180f;      // MASSIVELY increased
+    public float pitchSpeed = 180f;     // MASSIVELY increased
+    public float yawSpeed = 150f;       // MASSIVELY increased
+    public float mouseSensitivity = 5.5f; // MUCH HIGHER sensitivity
     public bool useGravity = false;
 
     [Header("Shooting")]
@@ -26,12 +27,16 @@ public class Pesawat : MonoBehaviour
     public float bulletSpread = 10f;
 
     [Header("Collision Response")]
-    public float collisionKnockbackForce = 5f;
+    public float collisionKnockbackForce = 10f;  // Increased dari 5
+    public float invincibilityDuration = 2f;    // NEW: Durasi invincible setelah kena hit
+    public float blinkInterval = 0.1f;          // NEW: Interval kedip saat invincible
 
     Rigidbody rb;
     float lastShootTime = 0f;
     private bool isBeingKnockedBack = false;
     private float knockbackEndTime = 0f;
+    private bool isInvincible = false;
+    private float invincibilityEndTime = 0f;
 
     // Manual rotation tracking
     private float currentPitch = 0f;
@@ -44,9 +49,12 @@ public class Pesawat : MonoBehaviour
 
     // Manual speed control
     private float currentSpeed = 0f;
-    public float maxSpeed = 20f;
-    public float acceleration = 5f;
-    public float deceleration = 8f;
+    public float maxSpeed = 25f;        // Increased untuk speed lebih tinggi
+    public float acceleration = 12f;    // MUCH faster acceleration
+    public float deceleration = 15f;    // MUCH faster deceleration
+
+    // Visual feedback
+    private Renderer[] planeRenderers;
 
     void Start()
     {
@@ -68,6 +76,15 @@ public class Pesawat : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         if (bulletSpawnPoint == null) bulletSpawnPoint = transform;
+
+        // Get all renderers untuk efek blink
+        planeRenderers = GetComponentsInChildren<Renderer>();
+
+        // Update UI hearts saat mulai
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateLives(currentHealth);
+        }
     }
 
     void FixedUpdate()
@@ -92,6 +109,19 @@ public class Pesawat : MonoBehaviour
             HandleShooting();
             HandleCursorToggle();
         }
+
+        // Handle invincibility blink effect
+        if (isInvincible && Time.time < invincibilityEndTime)
+        {
+            float blinkTimer = Time.time % blinkInterval;
+            bool visible = blinkTimer < (blinkInterval / 2);
+            SetPlaneVisibility(visible);
+        }
+        else if (isInvincible)
+        {
+            isInvincible = false;
+            SetPlaneVisibility(true);
+        }
     }
 
     void HandleCursorToggle()
@@ -105,7 +135,8 @@ public class Pesawat : MonoBehaviour
     void HandlePitchInput()
     {
         float mouseY = Mouse.current.delta.y.ReadValue();
-        float pitchInput = -mouseY / 50f;
+        // ULTRA RESPONSIVE: Sensitivity much higher
+        float pitchInput = -mouseY / 15f * mouseSensitivity; // Changed from /30f - MUCH MORE SENSITIVE
         float pitchDelta = pitchInput * pitchSpeed * Time.fixedDeltaTime;
         currentPitch += pitchDelta;
         currentPitch = ClampAngle(currentPitch, -89f, 89f);
@@ -125,7 +156,8 @@ public class Pesawat : MonoBehaviour
     void HandleYawInput()
     {
         float mouseX = Mouse.current.delta.x.ReadValue();
-        float yawInput = mouseX / 50f;
+        // ULTRA RESPONSIVE: Sensitivity much higher
+        float yawInput = mouseX / 15f * mouseSensitivity; // Changed from /30f - MUCH MORE SENSITIVE
         float yawDelta = yawInput * yawSpeed * Time.fixedDeltaTime;
         currentYaw += yawDelta;
         currentYaw = NormalizeAngle(currentYaw);
@@ -213,29 +245,73 @@ public class Pesawat : MonoBehaviour
         else Debug.Log("Bullet fired!");
     }
 
-    // --- FUNGSI INI SEHARUSNYA DI LUAR ShootBullet() ---
+    // === COLLISION DETECTION - IMPROVED ===
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            currentHealth--;
-            Debug.Log($"Duar! Pesawat tertabrak! Sisa nyawa: {currentHealth}");
+            // Skip jika sedang invincible
+            if (isInvincible) return;
 
-            if (currentHealth <= 0)
-            {
-                if (UIManager.instance != null)
-                {
-                    UIManager.instance.TriggerGameOver();
-                    this.enabled = false; // Matikan kontrol pesawat
-                }
-            }
-            else
-            {
-                Vector3 knockbackDirection = CalculateKnockbackDirection(collision.transform.position);
-                ApplyKnockback(knockbackDirection);
-                isBeingKnockedBack = true;
-                knockbackEndTime = Time.time + 0.2f;
-            }
+            TakeDamage(1, collision.transform.position);
+        }
+    }
+
+    // NEW: Fungsi TakeDamage yang terpisah
+    public void TakeDamage(int damage, Vector3 enemyPosition)
+    {
+        if (isInvincible) return;
+
+        currentHealth -= damage;
+        Debug.Log($"💥 Pesawat kena hit! Sisa nyawa: {currentHealth}/{maxHealth}");
+
+        // Update UI hearts
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.UpdateLives(currentHealth);
+        }
+
+        // Knockback effect
+        Vector3 knockbackDirection = CalculateKnockbackDirection(enemyPosition);
+        ApplyKnockback(knockbackDirection);
+        isBeingKnockedBack = true;
+        knockbackEndTime = Time.time + 0.3f;
+
+        // Invincibility frames
+        isInvincible = true;
+        invincibilityEndTime = Time.time + invincibilityDuration;
+
+        // Screen shake lebih kenceng
+        StartCoroutine(CameraShake(0.3f, 0.3f));
+
+        // Check game over
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Debug.Log("💀 GAME OVER - Pesawat hancur!");
+
+        if (UIManager.instance != null)
+        {
+            UIManager.instance.TriggerGameOver();
+        }
+
+        // Disable control tapi jangan destroy (biar masih keliatan)
+        this.enabled = false;
+
+        // Optional: Spawn explosion effect
+        // Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+    }
+
+    void SetPlaneVisibility(bool visible)
+    {
+        foreach (Renderer rend in planeRenderers)
+        {
+            rend.enabled = visible;
         }
     }
 
