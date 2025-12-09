@@ -245,7 +245,7 @@ public class Pesawat : MonoBehaviour
         else Debug.Log("Bullet fired!");
     }
 
-    // === COLLISION DETECTION - IMPROVED ===
+    // === COLLISION DETECTION ===
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -257,7 +257,6 @@ public class Pesawat : MonoBehaviour
         }
     }
 
-    // NEW: Fungsi TakeDamage yang terpisah
     public void TakeDamage(int damage, Vector3 enemyPosition)
     {
         if (isInvincible) return;
@@ -265,7 +264,7 @@ public class Pesawat : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"💥 Pesawat kena hit! Sisa nyawa: {currentHealth}/{maxHealth}");
 
-        // Update UI hearts
+        // UI hearts
         if (UIManager.instance != null)
         {
             UIManager.instance.UpdateLives(currentHealth);
@@ -300,7 +299,6 @@ public class Pesawat : MonoBehaviour
             UIManager.instance.TriggerGameOver();
         }
 
-        // Disable control tapi jangan destroy (biar masih keliatan)
         this.enabled = false;
     }
 
