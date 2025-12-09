@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-
-[Header("Movement Stats")]
+public class Enemy : MonoBehaviour
+{
+    [Header("Movement Stats")]
     public float moveSpeed = 15f;      // Kecepatan terbang
     public float turnSpeed = 2f;       // Kecepatan berputar mengejar pemain
     public float hoverFrequency = 2f;  // Seberapa cepat naik-turun (ombak)
