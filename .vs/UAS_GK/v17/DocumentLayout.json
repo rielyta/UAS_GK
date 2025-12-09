@@ -1,37 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\",
+  "WorkspaceRootPath": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Pesawat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Pesawat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\UIManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\UIManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\UIManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\EnemySpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Pesawat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Pesawat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletBoundary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\BulletBoundary.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\EnemySpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\EnemySpawner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\Bullet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Script\\BulletPool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,28 +46,40 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BulletPool.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\BulletPool.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\BulletPool.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\BulletPool.cs",
-              "RelativeToolTip": "Assets\\Script\\BulletPool.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "BulletBoundary.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletBoundary.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\BulletBoundary.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletBoundary.cs",
+              "RelativeToolTip": "Assets\\Script\\BulletBoundary.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAABJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T01:18:45.674Z",
+              "WhenOpened": "2025-12-08T09:30:37.947Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
+              "Title": "BulletPool.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletPool.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\BulletPool.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\BulletPool.cs",
+              "RelativeToolTip": "Assets\\Script\\BulletPool.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T01:18:45.674Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Pesawat.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Pesawat.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Pesawat.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Pesawat.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Pesawat.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Pesawat.cs",
               "RelativeToolTip": "Assets\\Script\\Pesawat.cs",
               "ViewState": "AgIAANUAAAAAAAAAAAAawOYAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -71,11 +88,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "Water_Volume.hlsl",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
               "RelativeDocumentMoniker": "Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
               "RelativeToolTip": "Assets\\WaterWorks\\Shaders\\Water_Volume.hlsl",
               "ViewState": "AQIAAJwAAAAAAAAAAAAnwKsAAACvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
@@ -85,9 +102,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Enemy.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Enemy.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Enemy.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Enemy.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Enemy.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Enemy.cs",
               "RelativeToolTip": "Assets\\Script\\Enemy.cs",
               "ViewState": "AQIAAE4AAAAAAAAAAAAYwGcAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -98,46 +115,49 @@
               "$type": "Document",
               "DocumentIndex": 5,
               "Title": "Bullet.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Bullet.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Bullet.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Bullet.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\Bullet.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\Bullet.cs",
               "RelativeToolTip": "Assets\\Script\\Bullet.cs",
               "ViewState": "AQIAABgAAAAAAAAAAAAswDIAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T08:06:38.061Z"
+              "WhenOpened": "2025-12-05T08:06:38.061Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "UIManager.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\UIManager.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\UIManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\UIManager.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\UIManager.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\UIManager.cs",
               "RelativeToolTip": "Assets\\Script\\UIManager.cs",
               "ViewState": "AQIAAA0AAAAAAAAAAAAQwB0AAAAxAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T08:05:17.057Z"
+              "WhenOpened": "2025-12-05T08:05:17.057Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EnemySpawner.cs",
+              "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\EnemySpawner.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\EnemySpawner.cs",
+              "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\Script\\EnemySpawner.cs",
+              "RelativeToolTip": "Assets\\Script\\EnemySpawner.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T07:26:30.051Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "EnemySpawner.cs",
-              "DocumentMoniker": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\EnemySpawner.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\EnemySpawner.cs",
-              "ToolTip": "D:\\5th Semester\\Grafika Komputer\\UAS\\UAS_GK\\Assets\\Script\\EnemySpawner.cs",
-              "RelativeToolTip": "Assets\\Script\\EnemySpawner.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T07:26:30.051Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "ColorCorrectionLookupEditor.cs",
               "DocumentMoniker": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
+              "RelativeDocumentMoniker": "Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
               "ToolTip": "D:\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
-              "RelativeToolTip": "..\\..\\..\\..\\kuliah\\semester 5\\Grafika Komputer\\UAS_GK\\Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
+              "RelativeToolTip": "Assets\\NatureStarterKit2\\Editor\\ImageEffects\\ColorCorrectionLookupEditor.cs",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-04T15:06:37.4Z"
             }
