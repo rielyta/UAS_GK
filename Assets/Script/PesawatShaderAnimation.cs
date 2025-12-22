@@ -9,7 +9,7 @@ public class PesawatShaderAnimation : MonoBehaviour
     public float maxMetallicFromRoll = 0.5f;
     
     [Header("Shoot Glow")]
-    public float maxGlowIntensity = 10f;  // Increased dari 3 ke 10 untuk flash lebih terang
+    public float maxGlowIntensity = 10f;  
     public float glowFadeDuration = 0.3f;
     
     private Coroutine glowCoroutine;

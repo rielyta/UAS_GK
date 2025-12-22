@@ -222,6 +222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 313315556}
   - component: {fileID: 313315555}
+  - component: {fileID: 313315557}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -241,6 +242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eae8e1be0a2fcd41b505e1954f14c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  enemyPrefab: {fileID: 0}
+  spawnInterval: 3
+  spawnDistance: 60
+  spawnRadius: 30
+  minHeightFromGround: 10
 --- !u!4 &313315556
 Transform:
   m_ObjectHideFlags: 0
@@ -256,6 +262,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &313315557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313315554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d21cb2247bb293c458ef7cee65e049a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  enemyPrefab: {fileID: 1097741704937675371, guid: 120c1bdeaca6ba14fb2119f3e2a8e771, type: 3}
+  spawnInterval: 3
+  spawnDistance: 60
+  spawnRadius: 30
+  minHeightFromGround: 10
 --- !u!1 &409398346
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,14 +312,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   moveSpeed: 5
-  zigzagSpeed: 3
-  zigzagAmount: 5
-  changeDirectionInterval: 2
-  growthAmount: 0.1
-  maxSize: 5
-  hitsToDestroy: 3
-  explosionForce: 20
-  explosionRadius: 10
+  turnSpeed: 2
+  hoverFrequency: 2
+  hoverAmplitude: 0.5
+  maxHealth: 3
+  scoreValue: 100
+  explosionPrefab: {fileID: 0}
+  damageToPlayer: 1
+  destroyOnPlayerHit: 1
 --- !u!54 &409398348
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -359,14 +382,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   moveSpeed: 2
-  zigzagSpeed: 3
-  zigzagAmount: 5
-  changeDirectionInterval: 2
-  growthAmount: 0.1
-  maxSize: 5
-  hitsToDestroy: 3
-  explosionForce: 20
-  explosionRadius: 10
+  turnSpeed: 2
+  hoverFrequency: 2
+  hoverAmplitude: 0.5
+  maxHealth: 3
+  scoreValue: 100
+  explosionPrefab: {fileID: 0}
+  damageToPlayer: 1
+  destroyOnPlayerHit: 1
 --- !u!4 &409398351
 Transform:
   m_ObjectHideFlags: 0
@@ -409,14 +432,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -598,6 +621,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &591980586
 MeshFilter:
@@ -752,6 +776,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1032966651
 MeshFilter:

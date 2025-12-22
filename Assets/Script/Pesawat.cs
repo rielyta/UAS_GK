@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
 
@@ -13,9 +13,9 @@ public class Pesawat : MonoBehaviour
     public float kecepatan = 10f;
     public float rollSpeed = 180f;      
     public float pitchSpeed = 180f;     
-    public float yawSpeed = 150f;       
+    public float yawSpeed = 150f;    
     public float mouseSensitivity = 5.5f; 
-  public bool useGravity = false;
+    public bool useGravity = false;
 
     [Header("Shooting")]
     public GameObject bulletPrefab;
@@ -29,7 +29,7 @@ public class Pesawat : MonoBehaviour
     [Header("Collision Response")]
     public float collisionKnockbackForce = 10f;  
     public float invincibilityDuration = 2f;    
-    public float blinkInterval = 0.1f;          
+    public float blinkInterval = 0.1f;         
 
     Rigidbody rb;
     float lastShootTime = 0f;
@@ -49,9 +49,9 @@ public class Pesawat : MonoBehaviour
 
     // Manual speed control
     private float currentSpeed = 0f;
-    public float maxSpeed = 25f;       
-    public float acceleration = 12f;   
-    public float deceleration = 15f;   
+    public float maxSpeed = 25f;      
+    public float acceleration = 12f; 
+    public float deceleration = 15f;    
 
     // Visual feedback
     private Renderer[] planeRenderers;
@@ -104,7 +104,7 @@ public class Pesawat : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale > 0)
+        if (Time.timeScale > 0) 
         {
             HandleShooting();
             HandleCursorToggle();
@@ -135,8 +135,7 @@ public class Pesawat : MonoBehaviour
     void HandlePitchInput()
     {
         float mouseY = Mouse.current.delta.y.ReadValue();
-        // ULTRA RESPONSIVE: Sensitivity much higher
-        float pitchInput = -mouseY / 15f * mouseSensitivity; // Changed from /30f - MUCH MORE SENSITIVE
+        float pitchInput = -mouseY / 15f * mouseSensitivity;
         float pitchDelta = pitchInput * pitchSpeed * Time.fixedDeltaTime;
         currentPitch += pitchDelta;
         currentPitch = ClampAngle(currentPitch, -89f, 89f);
@@ -177,7 +176,7 @@ public class Pesawat : MonoBehaviour
 
         if (Mathf.Abs(thrustInput) > 0.01f)
         {
-            currentSpeed = Mathf.Lerp(currentSpeed, thrustInput * maxSpeed, acceleration * Time.fixedDeltaTime);
+            currentSpeed = Mathf.Lerp(currentSpeed, thrustInput * maxSpeed, acceleration * Time.fixedDeltaTime); 
         }
         else
         {
@@ -245,7 +244,7 @@ public class Pesawat : MonoBehaviour
         else Debug.Log("Bullet fired!");
     }
 
-    // === COLLISION DETECTION ===
+    // === COLLISION DETECTION - IMPROVED ===
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -257,6 +256,7 @@ public class Pesawat : MonoBehaviour
         }
     }
 
+    // NEW: Fungsi TakeDamage yang terpisah
     public void TakeDamage(int damage, Vector3 enemyPosition)
     {
         if (isInvincible) return;
@@ -264,7 +264,7 @@ public class Pesawat : MonoBehaviour
         currentHealth -= damage;
         Debug.Log($"💥 Pesawat kena hit! Sisa nyawa: {currentHealth}/{maxHealth}");
 
-        // UI hearts
+        // Update UI hearts
         if (UIManager.instance != null)
         {
             UIManager.instance.UpdateLives(currentHealth);
@@ -299,7 +299,11 @@ public class Pesawat : MonoBehaviour
             UIManager.instance.TriggerGameOver();
         }
 
+        // Disable control tapi jangan destroy (biar masih keliatan)
         this.enabled = false;
+
+        // Optional: Spawn explosion effect
+        // Instantiate(explosionPrefab, transform.position, Quaternion.identity);
     }
 
     void SetPlaneVisibility(bool visible)
@@ -353,7 +357,6 @@ public class Pesawat : MonoBehaviour
 
     float NormalizeAngle(float angle)
     {
-        while (angle > 180f) angle -= 360f;
         while (angle < -180f) angle += 360f;
         return angle;
     }
